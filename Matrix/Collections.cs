@@ -1,11 +1,13 @@
-﻿namespace Collections
+﻿using System.Linq;
+
+namespace Collections
 {
     class Collections
     {
         private Random random = new Random();
 
         private List<List<int>> Data = new List<List<int>>();
-        private Dictionary<int, int> Dict = new Dictionary<int, int>();
+        private List<Dictionary<int, int>> Dict = new List<Dictionary<int, int>>();
         
         public Collections(int m, int n, int max)
         {
@@ -30,13 +32,15 @@
                     throw new Exception("Была передана пустая коллекция!");
                 foreach (var item in Data)
                 {
+                    var item2 = new Dictionary<int, int>();
                     foreach (var item1 in item)
                     {
-                        if (Dict.ContainsKey(item1))
-                            Dict[item1]++;
+                        if (item2.ContainsKey(item1))
+                            item2[item1]++;
                         else
-                            Dict.Add(item1, 1);
+                            item2.Add(item1, 1);
                     }
+                    Dict.Add(item2);
                 }
             }
             catch (Exception ex) 
@@ -65,9 +69,9 @@
             {
                 foreach (var item1 in item)
                 {
-                    Console.ForegroundColor = (ConsoleColor)item1;
+                    //Console.ForegroundColor = (ConsoleColor)item1;
                     Console.Write(item1 + "\t");
-                    Console.ResetColor();
+                    //Console.ResetColor();
                 }
                 Console.WriteLine();
             }
@@ -82,11 +86,16 @@
 
             // Словарь частот.
             Console.WriteLine("Словарь частот: ");
-            Console.WriteLine("{0, -10}{1,-20}", "Число:", "Кол-во:");
-            foreach (KeyValuePair<int, int> it in Dict.OrderByDescending(x => x.Value))
+            //Console.WriteLine("{0, -10}{1,-20}", "Число:", "Кол-во:");
+            foreach (var item in Dict)
             {
-                Console.WriteLine("{0, -10}{1,-20}", it.Key, it.Value);
+                foreach (KeyValuePair<int, int> it in item.OrderByDescending(x => x.Value))
+                {
+                    Console.Write($"{it.Key} = {it.Value}\t");
+                }
+                Console.WriteLine();
             }
+            
 
         }
 
